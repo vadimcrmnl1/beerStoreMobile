@@ -1,21 +1,22 @@
 import {Text, View} from "react-native";
+import {useAppSelector} from "../../app/hooks";
 import {Product} from "../../common/components/Product/Product";
 import {styles} from "../../common/styles/styles";
-import {ProductType} from "./model/drinks-reducer";
+import {selectDrinks} from "./model/drinks-selectors";
 
-type DrinksPropsType = {
-    drinks: ProductType[]
-}
+// type DrinksPropsType = {
+//     drinks: ProductType[]
+// }
 
-export const Drinks = (props: DrinksPropsType) => {
-    const drinks = props.drinks
+export const Drinks = ({navigation}) => {
+    const drinks = useAppSelector(selectDrinks)
 
     return (
         <View style={styles.wrapper}>
-            <View>
+            <View style={styles.wrapper}>
                 <Text style={styles.title}>Виски</Text>
                 {drinks.length ? drinks.filter(el => el.category === 'whiskey').map(el => {
-                    return <Product key={el.id} id={el.id} title={el.title} description={el.description}
+                    return <Product navigation={navigation} key={el.id} id={el.id} title={el.title} description={el.description}
                                     price={el.price}
                                     totalPrice={el.totalPrice} amount={el.amount} totalAmount={el.totalAmount}
                                     image={el.image} type={el.type} brand={el.brand} manufacturer={el.manufacturer}

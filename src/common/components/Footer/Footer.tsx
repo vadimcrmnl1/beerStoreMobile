@@ -1,24 +1,31 @@
 import React from "react";
-import {ImageBackground, Text, TouchableOpacity, View} from "react-native";
+import {Image, Text, View} from "react-native";
 import {useAppSelector} from "../../../app/hooks";
-import {selectProducts} from "../../../features/cart/model/selectors";
-import cartIcon from "../../images/icons/cart.png";
-import {cartStyles} from "../../styles/styles";
+import {selectProducts, selectTotalCartPrice} from "../../../features/cart/model/selectors";
+import {ftrSt} from "../../styles/styles";
+import menuIcon from './../../../common/images/footer/menuColor.png'
+import cartIcon from './../../../common/images/icons/cart.png'
 
 export const Footer = ({navigation}) => {
     const products = useAppSelector(selectProducts)
+    const price = useAppSelector(selectTotalCartPrice)
 
     return (
-        <View style={cartStyles.cartIconWrapper}>
-            {/*{products.length !== 0 ?*/}
-                <View onTouchEnd={() => navigation.navigate('Cart')} style={cartStyles.cartIconContainer}>
-                    <TouchableOpacity style={cartStyles.cartIcon}>
-                        <Text style={cartStyles.cartBlockText}>В кошику: </Text>
-                        <Text style={cartStyles.cartBlockText}>{products.length}</Text>
-                    </TouchableOpacity>
-
+        <View style={ftrSt.wrapper}>
+            <View style={ftrSt.container}>
+                <View style={ftrSt.menuBlock}>
+                    <Image style={ftrSt.icon} source={menuIcon}/>
+                    <Text style={ftrSt.menuText}>Меню</Text>
                 </View>
-                {/*: null}*/}
+                <View style={ftrSt.cartBlock} onTouchEnd={() => navigation.navigate('Кошик')}>
+                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <Image style={ftrSt.icon} source={cartIcon}/>
+                        {products.length ? <Text style={ftrSt.cartText}>{products.length}</Text> : null}
+
+                    </View>
+                    <Text style={[ftrSt.menuText]}>{price === 50 ? '0' : price} грн</Text>
+                </View>
+            </View>
         </View>
 
     )

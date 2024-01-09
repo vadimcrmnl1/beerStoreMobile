@@ -21,9 +21,7 @@ const firebaseConfig = {
 //     appId: process.env.REACT_APP_APP_ID,
 //     measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 //     // contentType: 'application/json'
-//
 // };
 
 const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app)
-console.log('db', db)

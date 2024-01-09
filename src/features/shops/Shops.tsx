@@ -1,21 +1,20 @@
 import {onValue, ref} from 'firebase/database'
 import React, {useEffect} from "react";
 import {Text, View} from "react-native";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {db} from '../../app/firebase'
-import {useAppDispatch} from "../../app/hooks";
 import {styles} from "../../common/styles/styles";
-import {fetchShops} from "./model/shop-reducer";
+import {fetchShopsAC} from "./model/actions";
 import {selectShops} from "./model/shop-selectors";
 import {Shop} from "./Shop/Shop";
 
 export const Shops: React.FC = () => {
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch()
     const shops = useSelector(selectShops)
     useEffect(() => {
         onValue(ref(db), snapshot => {
             const data = snapshot.val()
-            dispatch(fetchShops(data.shops, data.shops))
+            dispatch(fetchShopsAC(data.shops))
         })
     }, [shops.length])
     return (

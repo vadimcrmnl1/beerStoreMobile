@@ -1,26 +1,17 @@
-import {Button, ScrollView, View} from "react-native";
-import {useAppSelector} from "../app/hooks";
-import {productStyles} from "../common/styles/styles";
+import {ScrollView, View} from "react-native";
+import {Footer} from "../common/components/Footer/Footer";
 import {Drinks} from "../features/drinks/Drinks";
-import {selectDrinks} from "../features/drinks/model/drinks-selectors";
 
-export const DrinksScreen = () => {
-    const drinks = useAppSelector(selectDrinks)
+export const DrinksScreen = ({navigation}) => {
+
     return (
-        <View style={{backgroundColor: '#282424'}}>
-            <View style={productStyles.linkBlock}>
-                <Button color={'#8f0000'} title={'Віскі'}/>
-                <Button color={'#8f0000'} title={'Ром'}/>
-                <Button color={'#8f0000'} title={'Коньяк'}/>
-                <Button color={'#8f0000'} title={'Бренди'}/>
-                <Button color={'#8f0000'} title={'Ликері'}/>
-                <Button color={'#8f0000'} title={'Водка'}/>
-            </View>
-            <ScrollView>
-                <View>
-                    <Drinks drinks={drinks}/>
+        <View style={{backgroundColor: '#282424', flex: 1}}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{flex: 1, zIndex: 13, display: 'flex', justifyContent: 'center'}}>
+                    <Drinks navigation={navigation}/>
                 </View>
             </ScrollView>
+            <Footer navigation={navigation}/>
         </View>
 
     )

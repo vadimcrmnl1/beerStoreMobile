@@ -1,8 +1,10 @@
 import React, {FC} from "react";
-import {Button, Image, Text, View} from "react-native";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {ProductType, setDrinkOrdered} from "../../../features/drinks/model/drinks-reducer";
-import {selectDrinks} from "../../../features/drinks/model/drinks-selectors";
+import {Image, Text, TouchableOpacity, View} from "react-native";
+import {useDispatch} from "react-redux";
+import {addProductAC} from "../../../features/cart/model/actions";
+import {setDrinksOrderedAC} from "../../../features/drinks/model/actions";
+import {ProductType} from "../../../features/drinks/model/drinks-reducer";
+import {setSnacksOrderedAC} from "../../../features/snacks/model/actions";
 import {productStyles} from "../../styles/styles";
 
 export const Product: FC<ProductType> = ({
@@ -20,17 +22,22 @@ export const Product: FC<ProductType> = ({
                                              ordered,
                                              title,
                                              manufacturer,
-                                             description
+                                             description, navigation
                                          }) => {
-    const dispatch = useAppDispatch()
-    const drinks = useAppSelector(selectDrinks)
+    const dispatch = useDispatch()
     const handleAddProduct = () => {
-        console.log('Button active')
+        dispatch(addProductAC({id, title, description, price, amount, type, image, totalPrice, totalAmount, ordered, category}))
+        dispatch(setDrinksOrderedAC(true, id))
+        dispatch(setSnacksOrderedAC(true, id))
     }
+    console.log('category', category)
     return (
         <View style={productStyles.wrapper}>
             <View style={productStyles.container}>
-                <Image style={productStyles.image} source={{uri: image}}/>
+                <View style={productStyles.imageBlock}>
+                    <Image style={[category === 'toast' ? {width: '100%', height: 250} : category === 'seafood' ? {width: '100%', height: 250} : category === 'chips' ? {width: '100%', height: 250} : {width: '50%', height: 300}]} source={{uri: image}}/>
+
+                </View>
                 <View style={productStyles.titleBlock}>
                     <Text style={productStyles.title}>{title}</Text>
                     {brand ? <Text style={productStyles.secondText}>{category}, {brand}, {manufacturer}</Text> : null}
@@ -43,13 +50,17 @@ export const Product: FC<ProductType> = ({
                     </View>
                     <View>
                         {!ordered ?
-                            <Button color={'red'} onPress={handleAddProduct} title={'В кошик'}/> :
-                            <Button title={'В кошику'}/>
+                            <TouchableOpacity style={productStyles.button} onPress={handleAddProduct}>
+                                <Text style={productStyles.buttonText}>В кошик</Text>
+                            </TouchableOpacity> :
+                            <TouchableOpacity disabled={true} style={[productStyles.button, {backgroundColor: '#fff'}]}>
+                                <Text style={[productStyles.buttonText, {color: 'red'}]}>В кошику</Text>
+                            </TouchableOpacity>
                         }
                     </View>
                 </View>
                 <View>
-                    <Text>{description}</Text>
+                    {description ? <Text style={productStyles.descBlock}>{description}</Text> : null}
                 </View>
             </View>
         </View>

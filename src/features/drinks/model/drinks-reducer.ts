@@ -1,32 +1,61 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {DrinksActionTypes} from "./types";
 
-const slice = createSlice({
-    name: 'drinks',
-    initialState: {
-        drinks: [] as ProductType[]
-    },
-    reducers: {
-        fetchDrinks(state, action: PayloadAction<ProductType[]>) {
-            state.drinks = action.payload
-        },
-        sortDrinks(state, action) {
-            state.drinks = state.drinks.filter(el => el.category === action.payload)
-        },
-        setDrinkOrdered(state, action: PayloadAction<{ ordered: boolean, id: string }>) {
-            state.drinks = state.drinks.map(el => el.id === action.payload.id ? {
-                ...el,
-                ordered: action.payload.ordered
-            } : el)
-        },
-        removeDrinks(state) {
+export const drinksInitialState = {
+    drinks: [] as ProductType[]
+}
+export type DrinksInitialStateType = typeof drinksInitialState
+export const drinksReducer = (state: DrinksInitialStateType = drinksInitialState, action: DrinksActionTypes): DrinksInitialStateType => {
+    switch (action.type) {
+        case 'DRINKS/FETCH_DRINKS':
+            return {
+                ...state,
+                drinks: action.payload.drinks
+            }
+        case 'DRINKS/SET_PRODUCT_ORDERED':
+            return {...state,
+                drinks: state.drinks.map(el => el.id === action.payload.id ? {
+                    ...el,
+                    ordered: action.payload.ordered
+                } : el)
+            }
+        case 'DRINKS/SORT_DRINKS':
+            return {...state, drinks: state.drinks.filter(el => el.category === action.payload.category)}
+        case 'DRINKS/REMOVE_DRINKS_STATE':
             return state
-        }
-    },
+        default:
+            return state
+    }
+}
 
-})
 
-export const drinksReducer = slice.reducer
-export const {fetchDrinks, setDrinkOrdered, removeDrinks, sortDrinks} = slice.actions
+// RTK
+// const slice = createSlice({
+//     name: 'drinks',
+//     initialState: {
+//         drinks: [] as ProductType[]
+//     },
+//     reducers: {
+//         fetchDrinks(state, action: PayloadAction<ProductType[]>) {
+//             state.drinks = action.payload
+//         },
+//         sortDrinks(state, action) {
+//             state.drinks = state.drinks.filter(el => el.category === action.payload)
+//         },
+//         setDrinkOrdered(state, action: PayloadAction<{ ordered: boolean, id: string }>) {
+//             state.drinks = state.drinks.map(el => el.id === action.payload.id ? {
+//                 ...el,
+//                 ordered: action.payload.ordered
+//             } : el)
+//         },
+//         removeDrinks(state) {
+//             return state
+//         }
+//     },
+//
+// })
+//
+// export const drinksReducer = slice.reducer
+// export const {fetchDrinks, setDrinkOrdered, removeDrinks, sortDrinks} = slice.actions
 
 export type ProductType = {
     id: string
