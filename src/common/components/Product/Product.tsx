@@ -30,7 +30,6 @@ export const Product: FC<ProductType> = ({
         dispatch(setDrinksOrderedAC(true, id))
         dispatch(setSnacksOrderedAC(true, id))
     }
-    console.log('category', category)
     return (
         <View style={productStyles.wrapper}>
             <View style={productStyles.container}>

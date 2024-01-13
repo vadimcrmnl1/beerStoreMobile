@@ -24,6 +24,7 @@ type FormData = {
     totalPrice: number
     shop: string
     products: string[]
+    date: string
 }
 type FormPropsType = {
     setOpen: (open: boolean) => void
@@ -36,7 +37,7 @@ export const Form: FC<FormPropsType> = ({setOpen, products, totalCartPrice}) => 
     const shopsData = shops.map(el => {
         return {value: el.city + ', ' + el.address}
     })
-
+    const messageData = new Date().toLocaleDateString('ru-Ru') + ' ' + new Date().toLocaleTimeString('ru-Ru')
     const {control, handleSubmit, formState: {errors}} = useForm<FormData>({
         defaultValues: {
             shop: '',
@@ -45,7 +46,8 @@ export const Form: FC<FormPropsType> = ({setOpen, products, totalCartPrice}) => 
             address: '',
             comment: '',
             totalPrice: totalCartPrice,
-            products: products.map(el => el.title + ', ' + el.totalAmount + ' уп(грам)')
+            products: products.map(el => el.title + ', ' + el.totalAmount + ' уп(грам)'),
+            date: messageData.toString()
 
         }
     })
@@ -58,9 +60,9 @@ export const Form: FC<FormPropsType> = ({setOpen, products, totalCartPrice}) => 
 
     const onSubmit = (data: FormData, e: any) => {
         e.preventDefault()
-        console.log(data)
         dispatch(setAppIsLoadingAC(true))
         setOpen(false)
+
         emailjs.sendForm('service_bd4iw0b', 'template_h4api22', e.target, '2gFQR1rMn1j28Vvml')
             .then((res) => {
                 if (res.status === 200) {
@@ -82,13 +84,14 @@ export const Form: FC<FormPropsType> = ({setOpen, products, totalCartPrice}) => 
             <Controller control={control} rules={{required: true}} name={'shop'}
                         render={({field: {onBlur, onChange, value}}) => (
                             <Dropdown data={shopsData} labelField={'value'} valueField={'value'} onChange={onChange}
-                                      onBlur={onBlur} value={value} style={cartStyles.input} showsVerticalScrollIndicator={false}
+                                      onBlur={onBlur} value={value} style={cartStyles.input}
+                                      showsVerticalScrollIndicator={false}
                                       placeholder={'Віберите магазин'} placeholderStyle={cartStyles.inputText}
-                                      itemTextStyle={cartStyles.inputText} itemContainerStyle={{backgroundColor: '#282424'}}
+                                      itemTextStyle={cartStyles.inputText}
+                                      itemContainerStyle={{backgroundColor: '#282424'}}
                                       selectedTextStyle={[cartStyles.inputText, {color: '#e5e5e5'}]}/>)}/>
             {errors.shop?.type === 'required' &&
                 <Text style={{color: '#e5e5e5', fontSize: 14}}>Будь ласка, вібери магазин</Text>}
-
             <Controller control={control}
                         rules={{required: true, minLength: 2, maxLength: 40}}
                         render={({field: {onChange, onBlur, value}}) => (
@@ -109,13 +112,12 @@ export const Form: FC<FormPropsType> = ({setOpen, products, totalCartPrice}) => 
                         rules={{required: true, minLength: 10, maxLength: 12}}
                         name={'phone'} render={({field: {onChange, onBlur, value}}) => (
                 <TextInput maxLength={12} style={cartStyles.input} textContentType={'telephoneNumber'}
-                           placeholder={'Ваш телефон через 380'} placeholderTextColor={'#e58038'}
-                           onBlur={onBlur} onChangeText={onChange} value={value}/>
+                           placeholder={'Ваш телефон через 380'} keyboardType={'phone-pad'}
+                           placeholderTextColor={'#e58038'}
+                           onBlur={onBlur} onChangeText={onChange} value={value.toString()}/>
             )}/>
             {errors.phone && <Text style={{color: '#e5e5e5', fontSize: 14}}>Будь ласка, введіть номер
-                    телефону через '380'</Text>}
-
-
+                телефону через '380'</Text>}
             <Controller control={control} rules={{required: true, minLength: 5, maxLength: 50}}
                         render={({field: {onChange, onBlur, value}}) => (
                             <TextInput maxLength={50} style={cartStyles.input} placeholder={'Адреса доставки'}
@@ -124,7 +126,6 @@ export const Form: FC<FormPropsType> = ({setOpen, products, totalCartPrice}) => 
                         )} name={'address'}/>
             {errors.address &&
                 <Text style={{color: '#e5e5e5', fontSize: 14}}>Будь ласка, введіть адресу доставки</Text>}
-
             <Controller control={control} rules={{required: false, maxLength: 60}}
                         name={'comment'} render={({field: {onChange, onBlur, value}}) => (
                 <TextInput maxLength={60} style={cartStyles.input} placeholder={'Коментар для співробітників'}
@@ -132,17 +133,12 @@ export const Form: FC<FormPropsType> = ({setOpen, products, totalCartPrice}) => 
                            value={value}/>
             )}/>
             {errors.comment && <Text style={{color: '#e5e5e5', fontSize: 14}}>Введіть коментар до 60 символов</Text>}
-
-            {/*<Controller control={control} rules={{required: true}} name={'products'}*/}
-            {/*render={({field: {value, onBlur, onChange}}) => (*/}
-            {/*    <TextInput aria-hidden={true} value={value} onChangeText={onChange} onBlur={onBlur}/>*/}
-            {/*)}/>*/}
-            {/*<View style={{marginBottom: 40, height: 60}}>*/}
-            {/*<Button color={'green'} title={'Submit'} onPress={handleSubmit(onSubmit)}/>*/}
-
-            {/*</View>*/}
             <TouchableOpacity onPress={handleSubmit(onSubmit)} id={'Submit'}
-                              style={[cartStyles.emptyCartButton, {backgroundColor: '#27a2e8', marginBottom: 30, margin: 0}]}>
+                              style={[cartStyles.emptyCartButton, {
+                                  backgroundColor: '#27a2e8',
+                                  marginBottom: 30,
+                                  margin: 0
+                              }]}>
                 <Text style={{color: '#fff', fontSize: 26, textAlign: 'center', textTransform: 'uppercase'}}>Відправити
                     замовлення</Text>
             </TouchableOpacity>

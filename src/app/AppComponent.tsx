@@ -1,3 +1,4 @@
+import {Entypo, Ionicons, MaterialCommunityIcons,} from "@expo/vector-icons";
 import {createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList} from "@react-navigation/drawer";
 import {NavigationContainer} from "@react-navigation/native";
 import {onValue, ref} from "firebase/database";
@@ -23,10 +24,18 @@ function CustomDrawerContent(props) {
     return (
         <DrawerContentScrollView {...props} style={{backgroundColor: '#282424'}}>
             <DrawerItemList {...props} />
-            <DrawerItem label={'Instagram'} onPress={() => Linking.openURL('https://mywebsite.com/help')}
-                        labelStyle={{color: '#e5e5e5', fontSize: 18, marginLeft: 40}}
-
+            <DrawerItem
+                icon={() => <Entypo name="instagram" size={24} color="#e5e5e5" />}
+                label={'Ми в Instagram'} onPress={() => Linking.openURL('https://www.instagram.com/pivniy_zhyvit/')}
+                labelStyle={{color: '#e5e5e5', fontSize: 18}}
             />
+            <DrawerItem
+                icon={() => <Entypo name="facebook" size={24} color="#e5e5e5" />}
+                label={'Ми в Facebook'}
+                onPress={() => Linking.openURL('https://www.facebook.com/people/%D0%9F%D0%B8%D0%B2%D0%BD%D0%B8%D0%B9-%D0%96%D0%B8%D0%B2%D1%96%D1%82/100063921219625/')}
+                labelStyle={{color: '#e5e5e5', fontSize: 18}}
+            />
+
 
 
         </DrawerContentScrollView>
@@ -36,29 +45,74 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
-    const options = {
-        drawerLabelStyle: {color: '#e5e5e5', fontSize: 18, marginLeft: 40},
-        drawerActiveBackgroundColor: '#3a3a3a',
-        headerStyle: {backgroundColor: '#282424'},
-        headerTitleStyle: {color: '#e5e5e5', fontWeight: '300', fontSize: 24}
-    }
+
     return (
         <Drawer.Navigator
             // useLegacyImplementation
             drawerContent={(props) => <CustomDrawerContent {...props} />}
+
         >
             <Drawer.Screen name="На початок" navigationKey={'Home'} component={HomeScreen}
                            options={{
-                               drawerLabelStyle: {color: '#e5e5e5', fontSize: 18, marginLeft: 40},
+                               drawerIcon: () => (
+                                   <Ionicons name={"md-home"} size={24} color={'#e5e5e5'}/>
+                               ),
+                               drawerLabelStyle: {color: '#e5e5e5', fontSize: 18},
                                drawerActiveBackgroundColor: '#3a3a3a',
-                               headerStyle: {backgroundColor: '#282424'},
+                               headerStyle: {backgroundColor: '#332d2d'},
                                headerTitleStyle: {color: '#e5e5e5', fontWeight: '300', fontSize: 24},
+
                            }}/>
-            <Drawer.Screen name="Закуски" navigationKey={'Snacks'} component={SnacksScreen} options={options}/>
-            <Drawer.Screen name="Напої" navigationKey={'Drinks'} component={DrinksScreen} options={options}/>
-            <Drawer.Screen name="Магазини" navigationKey={'Shops'} component={ShopsScreen} options={options}/>
-            <Drawer.Screen name="Кошик" navigationKey={'Cart'} component={CartScreen} options={options}/>
-            <Drawer.Screen name="Про нас" navigationKey={'About'} component={AboutScreen} options={options}/>
+            <Drawer.Screen name="Закуски" navigationKey={'Snacks'} component={SnacksScreen} options={{
+                drawerIcon: () => (
+                    <MaterialCommunityIcons name="cheese" size={24} color="#e5e5e5" />
+                ),
+                drawerLabelStyle: {color: '#e5e5e5', fontSize: 18},
+                drawerActiveBackgroundColor: '#3a3a3a',
+                headerStyle: {backgroundColor: '#332d2d'},
+                headerTitleStyle: {color: '#e5e5e5', fontWeight: '300', fontSize: 24},
+
+            }}/>
+            <Drawer.Screen name="Напої" navigationKey={'Drinks'} component={DrinksScreen} options={{
+                drawerIcon: () => (
+                    <Entypo name="drink" size={24} color="#e5e5e5" />
+                ),
+                drawerLabelStyle: {color: '#e5e5e5', fontSize: 18},
+                drawerActiveBackgroundColor: '#3a3a3a',
+                headerStyle: {backgroundColor: '#332d2d'},
+                headerTitleStyle: {color: '#e5e5e5', fontWeight: '300', fontSize: 24},
+
+            }}/>
+            <Drawer.Screen name="Магазини" navigationKey={'Shops'} component={ShopsScreen} options={{
+                drawerIcon: () => (
+                    <Entypo name="shop" size={24} color="#e5e5e5" />
+                ),
+                drawerLabelStyle: {color: '#e5e5e5', fontSize: 18},
+                drawerActiveBackgroundColor: '#3a3a3a',
+                headerStyle: {backgroundColor: '#332d2d'},
+                headerTitleStyle: {color: '#e5e5e5', fontWeight: '300', fontSize: 24},
+
+            }}/>
+            <Drawer.Screen name="Кошик" navigationKey={'Cart'} component={CartScreen} options={{
+                drawerIcon: () => (
+                    <Ionicons name="cart" size={24} color="#e5e5e5" />
+                ),
+                drawerLabelStyle: {color: '#e5e5e5', fontSize: 18},
+                drawerActiveBackgroundColor: '#3a3a3a',
+                headerStyle: {backgroundColor: '#332d2d'},
+                headerTitleStyle: {color: '#e5e5e5', fontWeight: '300', fontSize: 24},
+
+            }}/>
+            <Drawer.Screen name="Про нас" navigationKey={'About'} component={AboutScreen} options={{
+                drawerIcon: () => (
+                    <Ionicons name="information-circle" size={24} color="#e5e5e5" />
+                ),
+                drawerLabelStyle: {color: '#e5e5e5', fontSize: 18},
+                drawerActiveBackgroundColor: '#3a3a3a',
+                headerStyle: {backgroundColor: '#332d2d'},
+                headerTitleStyle: {color: '#e5e5e5', fontWeight: '300', fontSize: 24},
+
+            }}/>
 
         </Drawer.Navigator>
     );
